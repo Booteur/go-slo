@@ -1,0 +1,161 @@
+---
+swagger: "2.0"
+info:
+  description: "This is an api for a library project that will be used in our SLO\
+    \ course."
+  version: "v0.0.1"
+  title: "Library API Spec"
+schemes:
+- "http"
+- "https"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /v1/book:
+    get:
+      tags:
+      - "Book"
+      operationId: "ListBooks"
+      parameters: []
+      responses:
+        "200":
+          description: "A successful response and a list of books is returned."
+          schema:
+            $ref: "#/definitions/ListBooksResponse"
+    post:
+      tags:
+      - "Book"
+      operationId: "CreateBook"
+      parameters:
+      - in: "body"
+        name: "book"
+        required: true
+        schema:
+          $ref: "#/definitions/CreateBookRequest"
+        x-exportParamName: "Book"
+      responses:
+        "200":
+          description: "A successful response and a book is created."
+          schema:
+            $ref: "#/definitions/CreateBookResponse"
+        "403":
+          description: "Another book with the same ID exists"
+          schema:
+            $ref: "#/definitions/CreateBookResponse"
+  /v1/book/{bookID}:
+    get:
+      tags:
+      - "Book"
+      operationId: "GetBookById"
+      parameters:
+      - name: "bookID"
+        in: "path"
+        required: true
+        type: "string"
+        x-exportParamName: "BookID"
+      responses:
+        "200":
+          description: "A successful response and the requested book is returned."
+          schema:
+            $ref: "#/definitions/Book"
+        "404":
+          description: "The book with the specified ID was not found."
+    put:
+      tags:
+      - "Book"
+      operationId: "UpdateBookById"
+      parameters:
+      - name: "bookID"
+        in: "path"
+        required: true
+        type: "string"
+        x-exportParamName: "BookID"
+      - in: "body"
+        name: "book"
+        required: true
+        schema:
+          $ref: "#/definitions/CreateBookRequest"
+        x-exportParamName: "Book"
+      responses:
+        "200":
+          description: "A successful response and the book is updated."
+          schema:
+            $ref: "#/definitions/CreateBookResponse"
+        "404":
+          description: "The book with the specified ID was not found."
+    delete:
+      tags:
+      - "Book"
+      operationId: "DeleteBook"
+      parameters:
+      - name: "bookID"
+        in: "path"
+        required: true
+        type: "string"
+        x-exportParamName: "BookID"
+      responses:
+        "200":
+          description: "A successful response and the book is deleted."
+          schema:
+            $ref: "#/definitions/DeleteBookResponse"
+        "404":
+          description: "The book with the specified ID was not found."
+definitions:
+  CreateBookRequest:
+    type: "object"
+    properties:
+      bookID:
+        type: "string"
+      bookDescription:
+        type: "string"
+      bookTitle:
+        type: "string"
+      bookAuthor:
+        type: "string"
+    example:
+      bookDescription: "bookDescription"
+      bookAuthor: "bookAuthor"
+      bookID: "bookID"
+      bookTitle: "bookTitle"
+  CreateBookResponse:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+      message:
+        type: "string"
+    example:
+      message: "message"
+      status: "status"
+  ListBooksResponse:
+    type: "array"
+    items:
+      $ref: "#/definitions/Book"
+  Book:
+    type: "object"
+    properties:
+      bookID:
+        type: "string"
+      bookDescription:
+        type: "string"
+      bookTitle:
+        type: "string"
+      bookAuthor:
+        type: "string"
+    example:
+      bookDescription: "bookDescription"
+      bookAuthor: "bookAuthor"
+      bookID: "bookID"
+      bookTitle: "bookTitle"
+  DeleteBookResponse:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+      message:
+        type: "string"
+    example:
+      message: "message"
+      status: "status"
